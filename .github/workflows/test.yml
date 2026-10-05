@@ -25,9 +25,11 @@ on:
         description: For ios-perf, a commit to compare with on the same runner (A/B), or empty
         default: ""
 
-# Per action, so a test run and a benchmark run don't cancel each other, and never a build.
+# A test run cancels the one before it. Benchmark runs are per commit (and base and
+# filter), so several run side by side, each on its own runner: perf.py starts them,
+# keeping one of the five macOS runners free for a build. Neither cancels a build.
 concurrency:
-  group: chattr-${{ inputs.action }}
+  group: chattr-${{ inputs.action }}${{ inputs.action == 'ios-perf' && format('-{0}-{1}-{2}', inputs.sha, inputs.base, inputs.filter) || '' }}
   cancel-in-progress: true
 
 permissions: {}
