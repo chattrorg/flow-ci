@@ -1,7 +1,7 @@
 name: Build
 run-name: ${{ inputs.sha }}
 
-# Builds the private repo chattrorg/chattr-app here, because GitHub's macOS runners are free for
+# Builds the private repo chattrorg/flow-app here, because GitHub's macOS runners are free for
 # public repos. This repo holds only workflows (this one, and test.yml for the tests): the job
 # checks out the given commit with a read-only deploy key and runs the build steps from it
 # (.github/actions/ios-build), which keep everything readable here free of source. Builds are
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       sha:
-        description: chattr-app commit to build
+        description: flow-app commit to build
         required: true
       full:
         description: Archive fully optimized (whole-module, dSYM) instead of the fast incremental build
@@ -31,7 +31,7 @@ jobs:
     timeout-minutes: 30
     steps:
       # Not actions/checkout: it logs "HEAD is now at <sha> <commit subject>", and this log is public.
-      - name: Check out chattr-app
+      - name: Check out flow-app
         env:
           DEPLOY_KEY: ${{ secrets.SOURCE_DEPLOY_KEY }}
           SHA: ${{ inputs.sha }}
@@ -43,12 +43,12 @@ jobs:
             > "$RUNNER_TEMP/known_hosts"
           export GIT_SSH_COMMAND="ssh -i $key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/known_hosts"
           git init -q .
-          git remote add origin git@github.com:chattrorg/chattr-app.git
+          git remote add origin git@github.com:chattrorg/flow-app.git
           git fetch -q --depth 1 origin "$SHA"
           git checkout -q FETCH_HEAD
           rm "$key"
 
-      # chattr-app's own workflow ended at run 136, so build numbers continue from there.
+      # flow-app's own workflow ended at run 136, so build numbers continue from there.
       - name: Build number
         run: echo "BUILD_NUMBER=$((GITHUB_RUN_NUMBER + 136))" >> "$GITHUB_ENV"
 

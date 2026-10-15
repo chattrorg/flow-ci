@@ -1,3 +1,3 @@
-# chattr-ci
+# flow-ci
 
-Runs CI builds for Chattr, whose source is private. Nothing to see here.
+Runs CI builds for Flow, whose source is private. Nothing to see here.

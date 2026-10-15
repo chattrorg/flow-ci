@@ -1,7 +1,7 @@
 name: Test
 run-name: ${{ inputs.action }} ${{ inputs.sha }}
 
-# Runs chattr-app's tests in the iOS Simulator for a commit, with the steps from its
+# Runs flow-app's tests in the iOS Simulator for a commit, with the steps from its
 # .github/actions/<action>: ios-test runs the unit tests (ChattrTests), ios-perf the benchmarks
 # (ChattrPerfTests). Like the builds, the log shows only whether they passed, and results are
 # uploaded encrypted. Dispatched from Florian's VPS: `~/chattr-ota/ci.py --test` and
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       sha:
-        description: chattr-app commit to test
+        description: flow-app commit to test
         required: true
       action:
         description: Which tests to run
@@ -41,7 +41,7 @@ jobs:
     timeout-minutes: ${{ inputs.base != '' && 90 || 45 }}
     steps:
       # Not actions/checkout: it logs "HEAD is now at <sha> <commit subject>", and this log is public.
-      - name: Check out chattr-app
+      - name: Check out flow-app
         env:
           DEPLOY_KEY: ${{ secrets.SOURCE_DEPLOY_KEY }}
           SHA: ${{ inputs.sha }}
@@ -54,7 +54,7 @@ jobs:
             > "$RUNNER_TEMP/known_hosts"
           export GIT_SSH_COMMAND="ssh -i $key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/known_hosts"
           git init -q .
-          git remote add origin git@github.com:chattrorg/chattr-app.git
+          git remote add origin git@github.com:chattrorg/flow-app.git
           if [ -n "$BASE" ]; then git fetch -q --depth 1 origin "$BASE"; fi
           git fetch -q --depth 1 origin "$SHA"
           git checkout -q FETCH_HEAD
